@@ -5,12 +5,16 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var engine = require('ejs-mate');
 
-var indexRouter = require('./routes/index');
-var aboutRouter = require('./routes/about');
-var portafolioRouter = require('./routes/portafolio');
-var contactRouter = require('./routes/contact');
+var loginRouter = require('./routes/auth');
+var dashboardRouter = require('./routes/dashboard');
 
-var usersRouter = require('./routes/users');
+
+// importar modelos
+
+// var aboutRouter = require('./routes/about');
+// var portafolioRouter = require('./routes/portafolio');
+// var contactRouter = require('./routes/contact');
+// var usersRouter = require('./routes/users');
 
 var app = express();
 app.engine('ejs', engine);
@@ -21,14 +25,16 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/about', aboutRouter);
-app.use('/portafolio', portafolioRouter);
-app.use('/contact', contactRouter);
+app.use('/', loginRouter);
+app.use('/dashboard', dashboardRouter);
+
+// app.use('/about', aboutRouter);
+// app.use('/portafolio', portafolioRouter);
+// app.use('/contact', contactRouter);
 
 
 // catch 404 and forward to error handler
