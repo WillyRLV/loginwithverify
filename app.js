@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', loginRouter);
-app.use('/dashboard', dashboardRouter);
+// app.use('/dashboard', dashboardRouter);
 
 // app.use('/about', aboutRouter);
 // app.use('/portafolio', portafolioRouter);

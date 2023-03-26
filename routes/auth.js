@@ -2,15 +2,19 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const modelUser = require('../models').User;
+var dashboardRouter = require('../routes/dashboard');
 
 
 
+
+
+router.use('/dashboard', dashboardRouter);
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('auth', { title: 'Express' });
 });
 
-router.post('/',function (req,res) {
+router.post('/signin',function (req,res) {
   console.log(req.body);
   
 })
@@ -23,23 +27,19 @@ router.post('/signup', function (req, res) {
   const password = req.body.password
   let passHash = bcrypt.hashSync(password, 10)
 
-
-  //   try {
-    modelUser.create({
+    modelUser.findOne({
         firstName: firstname,
         lastName: lastname,
         email:email,
-        password: password,
+        password: passHash,
     }).then(data => {
-        res.json({
-            user: data
-        })
+        // res.json({
+        //     user: data
+        // })
+        res.redirect('/dashboard')
     }).catch(err => {
-        res.status(500).json(err)
+        res.status(500).redirect('/')
     })
-// } catch (error) {
-//     console.log(error);
-// }
 
 
 // res.json({firstname: firstname, lastname: lastname, email: email, password: passHash})
