@@ -45,9 +45,10 @@ router.post('/signup', async function (req, res, next) {
             email: email,
             password: passHash,
           }).then(data => {
-            res.json({
-              user: data
-            })
+            // res.json({
+            //   user: data
+            // })
+            res.redirect('/dashboard')
             // res.redirect('/dashboard')
           }).catch(err => {
             res.status(500).redirect('/')
