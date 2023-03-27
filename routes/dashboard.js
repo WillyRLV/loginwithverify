@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const passport = require('passport');
+const express = require('express');
+const router = express.Router();
+
+const {ensureAuthenticated} = require('../controllers/controllerAuth');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('dashboard', { title: 'dashboard' });
+router.get('/', ensureAuthenticated, (req, res, next) => {
+  const {username, firstName , lastName}= req.user;
+  res.render('dashboard', { title: 'dashboard',username: `${firstName} ${lastName}  ` });
 });
 
 module.exports = router;
+

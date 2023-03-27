@@ -1,12 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var engine = require('ejs-mate');
+const createError = require('http-errors');
+const modelUser = require('./models').User;
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const passportconfig = require('./config/passport/passport');
 
-var loginRouter = require('./routes/auth');
-var dashboardRouter = require('./routes/dashboard');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const engine = require('ejs-mate');
+const loginRouter = require('./routes/auth.js');
+const dashboardRouter = require('./routes/dashboard');
+
 
 
 // importar modelos
@@ -16,6 +21,8 @@ var dashboardRouter = require('./routes/dashboard');
 // var contactRouter = require('./routes/contact');
 // var usersRouter = require('./routes/users');
 
+
+
 var app = express();
 app.engine('ejs', engine);
 
@@ -23,13 +30,33 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', loginRouter);
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: false },
+  key: 'express.sid',
+}));
+
+
+// inicializamos
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use(express.json());
+// app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/', loginRouter) ;
+//ruta del dashboard
+app.use('/dashboard', dashboardRouter);
+passportconfig(modelUser)
+
+
 // app.use('/dashboard', dashboardRouter);
 
 // app.use('/about', aboutRouter);
@@ -41,6 +68,7 @@ app.use('/', loginRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {
