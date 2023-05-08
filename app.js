@@ -11,6 +11,8 @@ const logger = require('morgan');
 const engine = require('ejs-mate');
 const loginRouter = require('./routes/auth.js');
 const dashboardRouter = require('./routes/dashboard');
+const portfolioRouter = require('./routes/portafolio');
+
 
 
 
@@ -54,6 +56,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', loginRouter) ;
 //ruta del dashboard
 app.use('/dashboard', dashboardRouter);
+app.use('/portfolio', portfolioRouter);
+
 passportconfig(modelUser)
 
 

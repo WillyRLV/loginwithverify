@@ -3,8 +3,6 @@ const passport = require('passport');
 const bcrypt = require('bcrypt')
 const LocalStrategy = require('passport-local');
 
-
-
 module.exports = function (db) {
 
 
@@ -14,7 +12,6 @@ console.log(`el usuario ${username} intenta acceder`)
       if (!user) return done(null,false)
       if(!bcrypt.compareSync(password, user.password))
      {return done(null,false)}
-    
       return done(null,user)
 
     });
@@ -31,11 +28,6 @@ console.log(`el usuario ${username} intenta acceder`)
   
   })
    
-
- 
-
-
-
 //  db.findOne({ where:{email:'williamlv_98_2@hotmail.com'} }).then(dae =>{
 //   dae ? console.log(dae): console.log("talahueva");
 //  }).catch(err => console.log(err));

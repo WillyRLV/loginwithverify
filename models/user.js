@@ -19,9 +19,28 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init({
     username: DataTypes.STRING,
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email:{
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    photo :{
+      type:DataTypes.STRING,
+      allowNull: false
+    },
+
+    isVerify: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    status:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -29,14 +48,20 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true,
       },
     },
-    password: DataTypes.STRING
+    last_login:{
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'User',
   });
 
-
   return User;
 
-  
+
 };

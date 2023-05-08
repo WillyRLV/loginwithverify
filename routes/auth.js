@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const modelUser = require('../models').User;
 const dashboardRouter = require('../routes/dashboard');
+const uuid = require('uuid');
 
 
 // const passport = require('../config/passport/passport');
@@ -57,21 +58,42 @@ router.post('/signup',   (req, res, next) => {
   //   res.redirect('/dashboard')
    bcrypt.hash(password, 10, (err, hash) => { 
     modelUser.create({
+      id: uuid.v4(),
       username: email || firstname,
       firstName: firstname,
       lastName: lastname,
+      photo:'https://i.pinimg.com/736x/7f/5d/96/7f5d968a4c2b1e1beddad8e53d2152ae--red-kangaroo-male-kangaroo.jpg',
       email: email,
       password: hash,
+      last_login: new Date(),
     }).then(user => {
       req.login(user, (err) => {
         err ? next(err) :
+        console.log(err)
           res.redirect('/dashboard');
       });
-    }).catch(err => res.render('auth', { message: err.message }));
+    }).catch(err =>
+     {
+      console.log(err)
+      res.redirect('/')
+     }
+      
+     );
   });
 
 })
 
+
+router.get('/getall', (req, res) => {
+
+
+modelUser.findAll().then(user => {
+
+ 
+  res.json(user);
+});
+
+});
 
 
 router.get('/logout', (req, res, next) => {
